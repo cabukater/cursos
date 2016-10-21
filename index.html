@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <text-table>Teste FRont End Camila Assis</text-table>
+    <script src="Chart.min.js"></script>
+    <style type="text/css">
+    .container {
+        width: 1024px;
+        margin: 0 auto;
+    }
+    
+    .tables {
+        width: 45%;
+        display: inline-block;
+        border: 1px solid #ccc;
+        height: 300px;
+        margin: 10px;
+        overflow-y: auto;
+    }
+    
+    .text-table {
+        background-color: #ccc;
+        font-size: 16px;
+        height: 33px;
+        line-height: 33px;
+        padding: 20px;
+    }
+    
+    * {
+        font-family: calibri;
+    }
+    
+    .box {
+        margin: 0px auto;
+        width: 70%;
+    }
+    
+    .box-chart {
+        width: 100%;
+        margin: 0 auto;
+        padding: 10px;
+    }
+    </style>
+    <script src="http://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    var randomnb = function() {
+        return Math.round(Math.random() * 300)
+    };
+    </script>
+</head>
+
+<body>
+    <form action="post">
+        <input type="text" name="s" placeholder="Search..." id="teste">
+        <input type="submit" value="Search">
+    </form>
+    <!-- the result of the search will be rendered inside this div -->
+    <div id="result"></div>
+    <div class="container">
+        <div class="tables">
+            <h3 class="text-table">Solicitantes</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pedido</th>
+                        <th>Material</th>
+                        <th>Marca</th>
+                        <th>Data</th>
+                        <th>Qtd</th>
+                        <th>Preço</th>
+                    </tr>
+                </thead>
+                <tbody id="pedidos">
+                </tbody>
+            </table>
+        </div>
+        <div class="tables">
+            <h3 class="text-table">Insumos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Descrição</th>
+                        <th>Qtd</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody id="insumos">
+                </tbody>
+            </table>
+        </div>
+        <div class="tables">
+            <h3 class="text-table">Dados do Solicitante</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>CEP</th>
+                        <th>Endereço</th>
+                        <th>Num/Comp</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="dados">
+                </tbody>
+            </table>
+        </div>
+        <div class="tables">
+            <h3 class="text-table">Dados da Entrega</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>CEP</th>
+                        <th>Endereço</th>
+                        <th>Num/Comp</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="entrega">
+                </tbody>
+            </table>
+        </div>
+        <div class="destak">
+            Cálculos: Total do pedido ((preço dos insumos x quantidades) + (preço do material x quantidades)); Busca: Deve ser permitido inserir um numero de pedido e após a consulta, preencher automaticamente todos os campos do formulário; Implemente o HTML/CSS/JS do dashboard com os seguintes gráficos e tabelas (arquivo: dashboard.psd): [GRÁFICO] - Quantidade de pedidos por dia; [GRÁFICO] - Pedidos por solicitante; [TABELA] - Pedidos pendentes;
+        </div>
+        <div>
+            <div class="box-chart">
+                <canvas id="GraficoPizza" style="width:100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+    var materiais = "SELECT * FROM materiais, pedidos, insumos, solicitantes ORDER BY data_de_compra DESC LIMIT 0, 4 ";
+
+
+    mysqlQuery(materiais, function(result) {
+        // seto aqui todas minhas variaveis usaveis
+        var obj = JSON.parse(result);
+        var table_pedidos = document.getElementById("pedidos");
+        var table_insumos = document.getElementById("insumos");
+        var table_dados = document.getElementById("dados");
+        var table_entrega = document.getElementById("entrega");
+
+
+
+        obj.forEach(function(el) {
+            var teste = el.id_pedido;
+            var teste_input = $('#teste').val();
+
+            var html_body = "<tr>" +
+                "<td>" + el.id_pedido + "</td>" +
+                "<td>" + el.descricao + "</td>" +
+                "<td>" + el.marca + "</td>" +
+                "<td>" + el.data_de_compra + "</td>" +
+                "<td>" + el.quantidade + "</td>" +
+                "<td>" + el.preco + "</td>" +
+                "</tr>";
+            table_pedidos.innerHTML += html_body;
+
+            var html_body = "<tr>" +
+                "<td>" + el.marca + "</td>" +
+                "<td>" + el.descricao + "</td>" +
+                "<td>" + el.quantidade + "</td>" +
+                "<td>" + el.preco + "</td>" +
+                "</tr>";
+            table_insumos.innerHTML += html_body;
+
+            var html_body = "<tr>" +
+                "<td>" + el.nome + "</td>" +
+                "<td>" + el.cpf + "</td>" +
+                "<td>" + el.telefone + "</td>" +
+                "<td>" + el.cep + "</td>" +
+                "<td>" + el.rua + "</td>" +
+                "<td>" + el.numero + "</td>" +
+                "<td>" + el.cidade + "</td>" +
+                "<td>" + el.estado + "</td>" +
+                "</tr>";
+            table_dados.innerHTML += html_body;
+
+            var html_body = "<tr>" +
+                "<td>" + el.cep + "</td>" +
+                "<td>" + el.rua + "</td>" +
+                "<td>" + el.numero + "</td>" +
+                "<td>" + el.cidade + "</td>" +
+                "<td>" + el.estado + "</td>" +
+                "</tr>";
+            table_entrega.innerHTML += html_body;
+
+            var options = {
+                responsive: true,
+            };
+
+            var date = el.data_de_compra;
+            function comp(a, b) {
+    return new Date(date).getTime() - new Date(date).getTime();
+
+}
+date.sort(comp);
+
+
+            console.log(date);
+
+
+            var data = [{
+
+                value: randomnb(date),
+                color: "#F7464A",
+                highlight: "#FF5A5E",
+                label: (date),
+            }, {
+                value: randomnb(date),
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: (date)
+            }, {
+                value: randomnb(date),
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: (date)
+            }, {
+             value: randomnb(date),
+                color: "#F7464A",
+                highlight: "#FF5A5E",
+                label: (date),
+            }, {
+                value: randomnb(date),
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: (date)
+            }, {
+                value: randomnb(date),
+                color: "#FDB45C",
+                highlight: "#FFC870",
+                label: (date)
+            }]
+
+
+
+            window.onload = function() {
+
+                var ctx = document.getElementById("GraficoPizza").getContext("2d");
+                var PizzaChart = new Chart(ctx).Pie(data, options);
+            }
+        });
+
+
+
+    });
+
+    function mysqlQuery(sql_string, callback) {
+        // send a mysql query and a callback function to get this response
+        // the result as a array of objects like [{ result1, result2}]
+        // you have only permission to 'SELECT' on database :D
+
+        if (typeof sql_string == "string") {
+            var api_host = "http://192.241.152.185/";
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    if (callback != undefined && typeof callback == "function") {
+                        callback(xhttp.responseText);
+
+                    }
+                }
+
+            };
+            xhttp.open("GET", api_host + sql_string, false);
+            xhttp.send();
+        } else {
+            console.warn("Your query mysql is not a string");
+        }
+    }
+    </script>
+</body>
+
+</html>
