@@ -4,14 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <text-table>Teste FRont End Camila Assis</text-table>
+    <text-table>Camila Assis</text-table>
     <script src="Chart.min.js"></script>
     <style type="text/css">
     .container {
         width: 1024px;
         margin: 0 auto;
     }
-    
+
     .tables {
         width: 45%;
         display: inline-block;
@@ -20,7 +20,7 @@
         margin: 10px;
         overflow-y: auto;
     }
-    
+
     .text-table {
         background-color: #ccc;
         font-size: 16px;
@@ -28,16 +28,16 @@
         line-height: 33px;
         padding: 20px;
     }
-    
+
     * {
         font-family: calibri;
     }
-    
+
     .box {
         margin: 0px auto;
         width: 70%;
     }
-    
+
     .box-chart {
         width: 100%;
         margin: 0 auto;
@@ -151,10 +151,7 @@
 
 
         obj.forEach(function(el) {
-            var teste = el.id_pedido;
-            var teste_input = $('#teste').val();
-
-            var html_body = "<tr>" +
+             var solicitantes = "<tr>" +
                 "<td>" + el.id_pedido + "</td>" +
                 "<td>" + el.descricao + "</td>" +
                 "<td>" + el.marca + "</td>" +
@@ -162,17 +159,17 @@
                 "<td>" + el.quantidade + "</td>" +
                 "<td>" + el.preco + "</td>" +
                 "</tr>";
-            table_pedidos.innerHTML += html_body;
+            table_pedidos.innerHTML += solicitantes;
 
-            var html_body = "<tr>" +
+            var insumos = "<tr>" +
                 "<td>" + el.marca + "</td>" +
                 "<td>" + el.descricao + "</td>" +
                 "<td>" + el.quantidade + "</td>" +
                 "<td>" + el.preco + "</td>" +
                 "</tr>";
-            table_insumos.innerHTML += html_body;
+            table_insumos.innerHTML += insumos;
 
-            var html_body = "<tr>" +
+            var  dados= "<tr>" +
                 "<td>" + el.nome + "</td>" +
                 "<td>" + el.cpf + "</td>" +
                 "<td>" + el.telefone + "</td>" +
@@ -182,16 +179,16 @@
                 "<td>" + el.cidade + "</td>" +
                 "<td>" + el.estado + "</td>" +
                 "</tr>";
-            table_dados.innerHTML += html_body;
+            table_dados.innerHTML += dados;
 
-            var html_body = "<tr>" +
+            var entrega = "<tr>" +
                 "<td>" + el.cep + "</td>" +
                 "<td>" + el.rua + "</td>" +
                 "<td>" + el.numero + "</td>" +
                 "<td>" + el.cidade + "</td>" +
                 "<td>" + el.estado + "</td>" +
                 "</tr>";
-            table_entrega.innerHTML += html_body;
+            table_entrega.innerHTML += entrega;
 
             var options = {
                 responsive: true,
@@ -199,12 +196,9 @@
 
             var date = el.data_de_compra;
             function comp(a, b) {
-    return new Date(date).getTime() - new Date(date).getTime();
+          return new Date(date).getTime() - new Date(date).getTime();
 
-}
-date.sort(comp);
-
-
+            }
             console.log(date);
 
 
